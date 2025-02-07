@@ -2,7 +2,7 @@
   <img src="/images/answer.png" width="100" alt="logo" />
 </p>
 
-# 📚 Quiz-Anwendung
+# 🎯 Quiz-Anwendung
 Dies ist eine **Java-basierte Quiz-Anwendung**, entwickelt mit **Eclipse**, **Swing** für die GUI und **MySQL** für die Datenbankanbindung. Das Projekt ist **noch in Entwicklung**.
 ## 📝 Projektbeschreibung
 Die Anwendung bbQQuiz dient Lehrkräften dazu, Quizze zu erstellen, zu speichern, zu verwalten und zu exportieren. Fragen bestehen aus einem Fragetext, vier Antwortmöglichkeiten, einer Kennzeichnung der richtigen Antwort(en) und einer zugehörigen Punktzahl (auch negativ bei falschen Antworten).
