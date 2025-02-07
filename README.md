@@ -23,7 +23,7 @@ Die Fragen werden nach Themen und Kategorien strukturiert und als Einfach- oder 
 - **JDBC** (Datenbankanbindung)
 - **Swing** (Frontend-GUI u.a. für die Frageerstellung)
 ## 📊 Architektur
-- [**ER-Modell**](/images/mySQL_ERD.png), [**Klassendiagramm**](/images/Klassendiagramm.png) & [**Packagediagramm**](/images/PackageDiagramm.png) zur Datenstruktur.
+- [**ER-Modell**](/images/mySQL_ERD.png), [**Klassendiagramm**](/images/KlassenDiagramm.png) & [**Packagediagramm**](/images/PackageDiagramm.png) zur Datenstruktur.
 ## 📐 Design
 - Das [**Mockup**](/images/Mockup.pdf) zeigt das geplante Layout dieser Anwendung
 ## 🚧 Projektstatus
