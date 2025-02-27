@@ -3,9 +3,8 @@ package model;
 public class Thema extends BaseEntity {
 
 	private String bezeichnung;
-	
-	public Thema(int id, String bezeichnung) {
-		super(id);
+
+	public Thema(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
 
@@ -15,6 +14,11 @@ public class Thema extends BaseEntity {
 
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
+	}
+	
+	@Override
+	public String toString() {
+		return bezeichnung;
 	}
 
 }

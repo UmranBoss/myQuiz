@@ -8,8 +8,7 @@ public class Lehrer extends BaseEntity {
 	private String passwort;
 
 	// Konstruktor nutzt den Konstruktor der Basisklasse
-	public Lehrer(int id, String vorname, String nachname, String email, String passwort) {
-		super(id); // ID wird in der Basisklasse gespeichert
+	public Lehrer(String vorname, String nachname, String email, String passwort) {
 		this.vorname = vorname;
 		this.nachname = nachname;
 		this.email = email;

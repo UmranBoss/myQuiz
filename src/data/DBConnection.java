@@ -50,6 +50,15 @@ public class DBConnection {
 
 	// Gibt die Datenbankverbindung zurück
 	public Connection getConnection() {
+		try {
+			// Falls die Verbindung geschlossen wurde, erstelle eine neue
+			if (connection == null || connection.isClosed()) {
+				connection = DriverManager.getConnection(URL, USER, PASSWORD);
+				System.out.println("Neue DB-Verbindung erstellt!");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return connection;
 	}
 }

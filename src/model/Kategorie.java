@@ -4,8 +4,7 @@ public class Kategorie extends BaseEntity {
 
 	private String bezeichnung;
 
-	public Kategorie(int id, String bezeichnung) {
-		super(id);
+	public Kategorie(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
 
@@ -17,4 +16,8 @@ public class Kategorie extends BaseEntity {
 		this.bezeichnung = bezeichnung;
 	}
 
+	@Override
+	public String toString() {
+		return bezeichnung;
+	}
 }

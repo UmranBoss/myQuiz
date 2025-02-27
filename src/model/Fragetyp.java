@@ -5,5 +5,5 @@ package model;
  * den Fragetyp.
  */
 public enum Fragetyp {
-	EINZEL, MEHRFACH
+	EINZELWAHL, MEHRFACHWAHL
 }

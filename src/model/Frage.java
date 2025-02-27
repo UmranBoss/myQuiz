@@ -1,26 +1,21 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Frage extends BaseEntity {
 
 	private String fragetext;
 	private Fragetyp fragetyp;
 	private int maxPunktzahl;
 	private Quiz quiz;
+	private List<Antwort> antworten;
 
-	public Frage(int id, String fragetext, Fragetyp fragetyp, int maxPunktzahl, Quiz quiz) {
-		super(id);
+	public Frage(String fragetext, Fragetyp fragetyp, int maxPunktzahl, Quiz quiz) {
 		this.fragetext = fragetext;
 		this.fragetyp = fragetyp;
 		this.maxPunktzahl = maxPunktzahl;
 		this.quiz = quiz;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getFragetext() {
@@ -57,6 +52,21 @@ public class Frage extends BaseEntity {
 
 	public Integer getQuizId() {
 		return quiz.getId();
+	}
+
+	public List<Antwort> getAntworten() {
+		return antworten;
+	}
+
+	public void setAntworten(List<Antwort> antworten) {
+		this.antworten = antworten;
+	}
+
+	public void addAntwort(Antwort antwort) {
+		if (this.antworten == null) {
+			this.antworten = new ArrayList<>();
+		}
+		this.antworten.add(antwort);
 	}
 
 }

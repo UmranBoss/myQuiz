@@ -10,11 +10,11 @@ import java.util.List;
 import data.DBConnection;
 
 public abstract class BaseDAO<T> {
-	protected Connection connection;
+	protected final Connection conn;
 
 	public BaseDAO() {
 		// Verbindung zur DB herstellen
-		this.connection = DBConnection.getInstance().getConnection();
+		this.conn = DBConnection.getInstance().getConnection();
 	}
 
 	// CREATE
@@ -32,7 +32,7 @@ public abstract class BaseDAO<T> {
 	// Allgemeine Methode zum Ausführen von SQL-Abfragen und Mapping von Ergebnissen
 	protected List<T> executeQuery(String query, Object[] params, ResultSetMapper<T> mapper) {
 		List<T> result = new ArrayList<>();
-		try (PreparedStatement stmt = DBConnection.getInstance().getConnection().prepareStatement(query)) {
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
 			// Setze die Parameter im PreparedStatement (wenn vorhanden)
 			if (params != null) {
 				for (int i = 0; i < params.length; i++) {

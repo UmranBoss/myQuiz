@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Quiz extends BaseEntity {
 
@@ -8,17 +9,20 @@ public class Quiz extends BaseEntity {
 	private Lehrer lehrer;
 	private Kategorie kategorie;
 	private Thema thema;
-	private ArrayList<Frage> fragenListe;
+	private List<Frage> fragenListe;
 
 	// Konstruktor nutzt den Konstruktor der Basisklasse
-	public Quiz(int id, String titel, Lehrer lehrer, Kategorie kategorie, Thema thema) {
-		super(id); // ID wird in der Basisklasse gespeichert
+	public Quiz(String titel, Lehrer lehrer, Kategorie kategorie, Thema thema, List<Frage> fragenListe) {
+		this.titel = titel;
 		this.lehrer = lehrer;
 		this.kategorie = kategorie;
 		this.thema = thema;
-		this.fragenListe = new ArrayList<>();
+		this.fragenListe = new ArrayList<>(fragenListe); // Umwandlung von List in ArrayList
 	}
 
+	public Quiz(int id) {
+		this.id = id; // Direkt die ID aus der BaseEntity setzen
+	}
 
 	public String getTitel() {
 		return titel;
@@ -27,7 +31,7 @@ public class Quiz extends BaseEntity {
 	public void setTitel(String titel) {
 		this.titel = titel;
 	}
-	
+
 	public Lehrer getLehrer() {
 		return lehrer;
 	}
@@ -52,11 +56,11 @@ public class Quiz extends BaseEntity {
 		this.thema = thema;
 	}
 
-	public ArrayList<Frage> getFragenListe() {
+	public List<Frage> getFragenListe() {
 		return fragenListe;
 	}
 
-	public void setFragenListe(ArrayList<Frage> fragenListe) {
+	public void setFragenListe(List<Frage> fragenListe) {
 		this.fragenListe = fragenListe;
 	}
 
