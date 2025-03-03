@@ -32,6 +32,15 @@ import model.Frage;
 import model.Fragetyp;
 import model.Quiz;
 
+/**
+ * Diese Klasse stellt ein Panel zur Erstellung von Fragen für ein Quiz dar. Sie
+ * ermöglicht es dem Benutzer, eine Frage zu formulieren, Antwortmöglichkeiten
+ * hinzuzufügen und Punkte sowie Richtigkeit der Antworten festzulegen.
+ * 
+ * Das Panel besteht aus mehreren Unter-Panelen, die die verschiedenen
+ * Eingabefelder für die Frage und die Antworten beinhalten. Zusätzlich gibt es
+ * Buttons für das Speichern und Abbrechen der Eingaben.
+ */
 public class CreateQuestionPanel extends JPanel implements Constants {
 
 	private Quiz currentQuiz;
@@ -45,6 +54,14 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 	private QuizDAO quizDAO;
 	private BaseFrame frame;
 
+	/**
+	 * Konstruktor für das Panel zur Erstellung einer Frage.
+	 * 
+	 * @param quiz     Das Quiz, zu dem die Frage hinzugefügt wird
+	 * @param frageDAO Das DAO für die Fragen
+	 * @param quizDAO  Das DAO für das Quiz
+	 * @param frame    Das Hauptfenster (Frame) der Anwendung
+	 */
 	public CreateQuestionPanel(Quiz quiz, FrageDAO frageDAO, QuizDAO quizDAO, BaseFrame frame) {
 
 		this.currentQuiz = quiz;
@@ -66,35 +83,20 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		initComponents();
 	}
 
+	/**
+	 * Initialisiert alle Komponenten des Panels, einschließlich der Subpanels für
+	 * Frage, Fragetyp und Antworten.
+	 */
 	private void initComponents() {
 
-		// Subpanels, in einer Map gespeichert
+		// Initialisierung und Konfiguration der Subpanels, gespeicher in einer Map
 		Map<String, JPanel> subPanels = new LinkedHashMap<>();
-//		subPanels.put("headerQuestionPanel", new BasePanel());
-//		subPanels.put("questionPanel", new BasePanel());
-//		subPanels.put("headerQuestionTypePanel", new BasePanel();		
-//		subPanels.put("questionTypePanel", new BasePanel());
-//		subPanels.put("headerAnswerPanel", new BasePanel());
-//		subPanels.put("answerPanel", new BasePanel());
-//		subPanels.put("buttonPanel", new BasePanel());
-//		subPanels.put("backButtonPanel", new BasePanel());
-		// Oder die Subpanels in einem String packen, statt untereinander zu schreiben
 		String[] panelNames = { "headerQuestionPanel", "questionPanel", "headerQuestionTypePanel", "questionTypePanel",
 				"headerAnswerPanel", "answerPanel", "buttonPanel", "backButtonPanel" };
-
 		Color[] colors = { new Color(254, 216, 67), new Color(254, 216, 67), new Color(151, 222, 61),
 				new Color(151, 222, 61), new Color(106, 169, 255), new Color(106, 169, 255), Color.WHITE, Color.WHITE };
 
-//		Das war meine erste Version		
-//		BasePanel headerQuestionPanel = new BasePanel();
-//		BasePanel questionPanel = new BasePanel();
-//		BasePanel headerQuestionTypePanel = new BasePanel();		
-//		BasePanel questionTypePanel = new BasePanel();
-//		BasePanel headerAnswerPanel = new BasePanel();
-//		BasePanel answerPanel = new BasePanel();
-//		BasePanel buttonPanel = new BasePanel();
-//		BasePanel backButtonPanel = new BasePanel();
-
+		// Subpanels erstellen und konfigurieren
 		for (int i = 0; i < panelNames.length; i++) {
 			JPanel panel = new JPanel();
 			panel.setBackground(colors[i]);
@@ -111,11 +113,18 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		buttonPanel(subPanels.get("buttonPanel"));
 		backButtonPanel(subPanels.get("backButtonPanel"));
 
+		// Subpanels zum Hauptframe hinzufügen
 		for (JPanel panel : subPanels.values()) {
 			add(panel);
 		}
 	}
 
+	/**
+	 * Konfiguriert das Header-Panel für die Frage.
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel headerQuestionPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -128,6 +137,12 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Konfiguriert das Panel für die Eingabe der Frage.
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel questionPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -143,6 +158,12 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Konfiguriert das Header-Panel für den Fragetyp.
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel headerQuestionTypePanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -155,23 +176,28 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Konfiguriert das Panel zur Auswahl des Fragetypen (Einzelwahl oder
+	 * Mehrfachwahl).
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel questionTypePanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.gridx = 0;
-		// Erster RadioButton in Spalte 0
-		gbc.gridy = 0;
 
+		gbc.gridy = 0;
 		questionType1Radio = new BaseRadioButton("Einzelwahl");
 		questionType1Radio.setBackground(new Color(151, 222, 61));
 		questionType1Radio.setOpaque(true);
 		questionType1Radio.setToolTipText("Eine Antwort ist richtig.");
 		add(questionType1Radio, gbc);
-		// Zweiter RadioButton in Spalte 1
-		gbc.gridy++;
 
+		gbc.gridy++;
 		questionType2Radio = new BaseRadioButton("Mehrfachwahl");
 		questionType2Radio.setBackground(new Color(151, 222, 61));
 		questionType2Radio.setOpaque(true);
@@ -187,6 +213,12 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Konfiguriert das Header-Panel für die Antwortmöglichkeiten.
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel headerAnswerPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -200,103 +232,23 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 
 	}
 
+	/**
+	 * Konfiguriert das Panel für die Eingabe der Antwortmöglichkeiten, Punkte und
+	 * Richtigkeit.
+	 * 
+	 * @param panel Das Panel, das konfiguriert werden soll
+	 * @return Das konfiguriertes Panel
+	 */
 	private JPanel answerPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(5, 5, 5, 5);
-
-		/*
-		 * Gewicht der Spalten & Zeilen: Die Spalte erhält viel Platz, die Zeile nur
-		 * wenig.
-		 */
 		gbc.weightx = 1.0;
 		gbc.weighty = 0.1;
 
-		/*
-		 * Erste (lange) Version
-		 */
-//		// Antwort 1
-//		gbc.gridy = 0;
-//		gbc.gridx = 0;
-//		BaseTextField answer1 = new BaseTextField("Erste Antwortmöglichkeit eingeben.");
-//		panel.add(answer1, gbc);
-//
-//		// Antwort 2
-//		gbc.gridy++;
-//		gbc.gridx = 0;
-//		BaseTextField answer2 = new BaseTextField("Zweite Antwortmöglichkeit eingeben.");
-//		panel.add(answer2, gbc);
-//
-//		// Antwort 3
-//		gbc.gridy++;
-//		gbc.gridx = 0;
-//		BaseTextField answer3 = new BaseTextField("Dritte Antwortmöglichkeit eingeben.");
-//		panel.add(answer3, gbc);
-//
-//		// Antwort 4
-//		gbc.gridy++;
-//		gbc.gridx = 0;
-//		BaseTextField answer4 = new BaseTextField("Vierte Antwortmöglichkeit eingeben.");
-//		panel.add(answer4, gbc);
-//
-//		// Antwort 1: Punkte
-//		gbc.gridy = 0;
-//		gbc.gridx = 1;
-//		BaseTextField score1 = new BaseTextField("Punkt(e) für die erste Antwort eingeben.");
-//		panel.add(score1, gbc);
-//
-//		// Antwort 2: Punkte
-//		gbc.gridy++;
-//		gbc.gridx = 1;
-//		BaseTextField score2 = new BaseTextField("Punkt(e) für die zweite Antwort eingeben.");
-//		panel.add(score2, gbc);
-//
-//		// Antwort 3: Punkte
-//		gbc.gridy++;
-//		gbc.gridx = 1;
-//		BaseTextField score3 = new BaseTextField("Punkt(e) für die dritte Antwort eingeben.");
-//		panel.add(score3, gbc);
-//
-//		// Antwort 4: Punkte
-//		gbc.gridy++;
-//		gbc.gridx = 1;
-//		BaseTextField score4 = new BaseTextField("Punkt(e) für die vierte Antwort eingeben.");
-//		panel.add(score4, gbc);
-//
-//		// Antwort 1: Richtigkeit
-//		gbc.gridy = 0;
-//		gbc.gridx = 2;
-//		BaseCheckBox richtigkeit1 = new BaseCheckBox("Richtigkeit");
-//		panel.add(richtigkeit1, gbc);
-//
-//		// Antwort 2: Richtigkeit
-//		gbc.gridy++;
-//		gbc.gridx = 2;
-//		BaseCheckBox richtigkeit2 = new BaseCheckBox("Richtigkeit");
-//		panel.add(richtigkeit2, gbc);
-//
-//		// Antwort 3: Richtigkeit
-//		gbc.gridy++;
-//		gbc.gridx = 2;
-//		BaseCheckBox richtigkeit3 = new BaseCheckBox("Richtigkeit");
-//		panel.add(richtigkeit3, gbc);
-//
-//		// Antwort 4: Richtigkeit
-//		gbc.gridy++;
-//		gbc.gridx = 2;
-//		BaseCheckBox richtigkeit4 = new BaseCheckBox("Richtigkeit");
-//		panel.add(richtigkeit4, gbc);
-
-		/*
-		 * Optimierte Version
-		 */
-
 		String[] answer = { "Erste Antwortmöglichkeit eingeben.", "Zweite Antwortmöglichkeit eingeben.",
 				"Dritte Antwortmöglichkeit eingeben.", "Vierte Antwortmöglichkeit eingeben." };
-
-//		String[] score = { "Punkt(e) für die erste Antwort eingeben.", "Punkt(e) für die zweite Antwort eingeben.",
-//				"Punkt(e) für die dritte Antwort eingeben.", "Punkt(e) für die vierte Antwort eingeben." };
 
 		for (int i = 0; i < 4; i++) {
 			gbc.gridy = i;
@@ -325,6 +277,15 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Erstellt und konfiguriert ein Panel, das zwei Schaltflächen zum Abbrechen und
+	 * Speichern enthält. Die Schaltflächen sind in einem GridBagLayout angeordnet.
+	 * Beim Klicken auf "Speichern" werden die Benutzereingaben validiert und die
+	 * Frage in der Datenbank gespeichert.
+	 * 
+	 * @param panel Das Panel, auf dem die Schaltflächen hinzugefügt werden sollen.
+	 * @return Das geänderte Panel mit den hinzugefügten Schaltflächen.
+	 */
 	private JPanel buttonPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -350,6 +311,13 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 
 			}
 
+			/**
+			 * Speichert die aktuelle Frage in der Datenbank. Es wird ein Frage-Objekt
+			 * erstellt und mit den Antworten und Punktzahlen verknüpft. Nach erfolgreichem
+			 * Speichern wird das Quiz aktualisiert und die Tabelle neu geladen.
+			 * 
+			 * @param quiz Das aktuelle Quiz, dem die Frage hinzugefügt wird.
+			 */
 			private void saveQuestion(Quiz quiz) {
 
 				// Daten aus den Eingabefeldern sammeln
@@ -378,9 +346,6 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 				}
 				frage.setAntworten(antworten);
 
-				// Frage dem Quiz hinzufügen
-				// quiz.getFragenListe().add(frage);
-
 				// Frage speichern
 				boolean erfolg = frageDAO.create(frage);
 
@@ -405,12 +370,11 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 				}
 			}
 
-			/*
-			 * Benutzereingaben sammeln & ein FrageDTO-Objekt erstellen
+			/**
+			 * Sammelt die Benutzereingaben und erstellt ein FrageDTO-Objekt.
 			 * 
-			 * @return Ein FrageDTO-Objekt mit den gesammelten Daten
+			 * @return Ein FrageDTO-Objekt mit den gesammelten Daten.
 			 */
-
 			private FrageDTO collectQuestionData() {
 				String frageText = questionTextfield.getText().trim();
 				boolean isSingleChoice = questionType1Radio.isSelected();
@@ -429,7 +393,7 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 			}
 
 			/**
-			 * * Prüft, ob alle erforderlichen Eingaben für die Frage gültig sind.
+			 * Prüft, ob alle erforderlichen Eingaben für die Frage gültig sind.
 			 * 
 			 * @return {@code true}, wenn die Eingaben korrekt sind, sonst {@code false}.
 			 * 
@@ -441,13 +405,13 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 			 *         Bei Fehlern wird eine entsprechende Meldung angezeigt.
 			 */
 			private boolean validateInputs() {
-				// Zuerst: Prüfe, ob die Frage eingegeben wurde
+				// 1. Schritt: Prüfe, ob die Frage eingegeben wurde
 				if (questionTextfield.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(CreateQuestionPanel.this, "Deine Frage fehlt!");
 					return false;
 				}
 
-				// Zuerst alle Antwortfelder und zugehörige Scores validieren
+				// 2. Schritt: Alle Antwortfelder und zugehörige Scores validieren
 				for (int i = 0; i < 4; i++) {
 					if (answerFields[i].getText().trim().isEmpty()) {
 						JOptionPane.showMessageDialog(CreateQuestionPanel.this,
@@ -473,7 +437,8 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 					}
 				}
 
-				// Nun: Überprüfe einmalig die Gesamtzahl der als richtig markierten Antworten
+				// 3. Schritt: Überprüfe einmalig die Gesamtzahl der als richtig markierten
+				// Antworten
 				int correctAnswersCount = 0;
 				for (BaseCheckBox checkBox : rightCheckBoxes) {
 					if (checkBox.isSelected()) {
@@ -498,7 +463,7 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 					}
 				}
 
-				// Alle Prüfungen bestanden
+				// Wenn alle Prüfungen bestanden
 				return true;
 			}
 
@@ -507,6 +472,13 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 
 	}
 
+	/**
+	 * Erstellt und konfiguriert ein Panel, das eine Schaltfläche "Zurück" enthält.
+	 * Die Schaltfläche ist in einem GridBagLayout angeordnet und zentriert.
+	 * 
+	 * @param panel Das Panel, auf dem die Schaltfläche hinzugefügt wird.
+	 * @return Das geänderte Panel mit der hinzugefügten Schaltfläche.
+	 */
 	private JPanel backButtonPanel(JPanel panel) {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -520,11 +492,28 @@ public class CreateQuestionPanel extends JPanel implements Constants {
 		return panel;
 	}
 
+	/**
+	 * Setzt das aktuelle Quiz, das im Panel verwendet wird.
+	 * 
+	 * @param quiz Das Quiz, das dem Panel zugewiesen werden soll. Das Quiz wird für
+	 *             spätere Verwendungen gespeichert und mit der ID im Debug-Log
+	 *             ausgegeben.
+	 */
 	public void setQuiz(Quiz quiz) {
 		this.currentQuiz = quiz;
 		System.out.println("📌 DEBUG: Quiz im CreateQuestionPanel aktualisiert mit ID: " + quiz.getId());
 	}
 
+	/**
+	 * Setzt alle Eingabefelder auf ihre Standardwerte zurück.
+	 * 
+	 * @param questionTextfield Das Textfeld für die Frage, das geleert wird.
+	 * @param answerFields      Die Antwortfelder, die zurückgesetzt werden.
+	 * @param scoreFields       Die Spinners (Punktzahlen), die auf den Standardwert
+	 *                          (0) gesetzt werden.
+	 * @param rightCheckBoxes   Die Checkboxen, die angeben, ob eine Antwort korrekt
+	 *                          ist, werden deaktiviert.
+	 */
 	public void resetFields() {
 		// Frage-Textfeld leeren
 		questionTextfield.setText("");

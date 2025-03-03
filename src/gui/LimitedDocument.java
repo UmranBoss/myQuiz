@@ -1,7 +1,8 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 /**
  * Eine Dokumentklasse, die die maximale Anzahl an Zeichen für ein JTextField

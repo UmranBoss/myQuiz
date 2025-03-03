@@ -1,38 +1,69 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
 import data.dao.QuizDAO;
 import model.Antwort;
 import model.Frage;
+import model.Fragetyp;
 import model.Quiz;
+
+/**
+ * Das Panel zur Anzeige und Verwaltung der erstellten Quizzes.
+ * 
+ * Dieses Panel zeigt eine Tabelle mit einer Übersicht aller erstellten Quizzes,
+ * die aus der Datenbank geladen werden. Es ermöglicht das Bearbeiten (noch
+ * nicht implementiert), Löschen und Exportieren von Quizzes sowie das Anzeigen
+ * einer Vorschau der Quizzes.
+ */
 
 public class MyQuizzesPanel extends JPanel {
 
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private QuizDAO quizDAO;
-	private BaseFrame frame; // Referenz auf dein Hauptfenster
-	private List<Quiz> quizzes; // Merkt sich alle geladenen Quizzes
+	private BaseFrame frame;
+	private List<Quiz> quizzes;
 
+	/**
+	 * Konstruktor für das MyQuizzesPanel.
+	 * 
+	 * @param frame   Das übergeordnete Frame, in dem das Panel angezeigt wird.
+	 * @param quizDAO Das DAO-Objekt zur Interaktion mit der Quiz-Datenbank.
+	 */
 	public MyQuizzesPanel(BaseFrame frame, QuizDAO quizDAO) {
 		this.frame = frame;
 		this.quizDAO = quizDAO;
 		initComponents();
 	}
 
+	/**
+	 * Initialisiert die Komponenten des Panels, wie z. B. die Tabelle, Buttons und
+	 * die Layout-Konfiguration.
+	 */
 	private void initComponents() {
 		setLayout(new BorderLayout());
 
-		// Überschrift passend zum Mockup
 		JLabel headerLabel = new JLabel("Übersicht der erstellten Quizzes");
 		headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -65,7 +96,6 @@ public class MyQuizzesPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, BorderLayout.CENTER);
 
-		// Button-Leiste am unteren Rand
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		JButton refreshButton = new JButton("Aktualisieren");
 		refreshButton.addActionListener(e -> loadTableData());
@@ -83,8 +113,6 @@ public class MyQuizzesPanel extends JPanel {
 
 					// Quiz ermitteln
 					Quiz selectedQuiz = quizzes.get(row);
-					// Hier hättest du ID und könntest zur Sicherheit noch:
-					// Quiz fullQuiz = quizDAO.findById(selectedQuiz.getId());
 
 					switch (col) {
 					case 3: // Vorschau
@@ -94,7 +122,7 @@ public class MyQuizzesPanel extends JPanel {
 										+ "um Details zum ausgewählten Quiz anzuzeigen.)");
 						break;
 
-					case 4: // Bearbeiten (grau)
+					case 4: // Bearbeiten (Implementation für später)
 						JOptionPane.showMessageDialog(MyQuizzesPanel.this, "Bearbeiten ist derzeit nicht verfügbar.");
 						break;
 
@@ -120,7 +148,6 @@ public class MyQuizzesPanel extends JPanel {
 				}
 			}
 		});
-//		loadTableData();
 	}
 
 	/**
@@ -128,15 +155,13 @@ public class MyQuizzesPanel extends JPanel {
 	 */
 	public void loadTableData() {
 		tableModel.setRowCount(0); // Tabelle leeren
-		// Hier alle Quizzes laden
-		quizzes = quizDAO.findAll();
-		// findAll() muss in deinem QuizDAO implementiert sein.
+		quizzes = quizDAO.findAll(); // Quizze laden
 
 		if (quizzes != null) {
 			for (Quiz quiz : quizzes) {
 				Object[] rowData = { quiz.getTitel(), (quiz.getThema() != null) ? quiz.getThema().getBezeichnung() : "",
 						(quiz.getKategorie() != null) ? quiz.getKategorie().getBezeichnung() : "", "🔍", // Vorschau
-						"✏️ (nicht freigeschaltet)", // Bearbeiten
+						"✏️ (inaktiv)", // Bearbeiten
 						"🗑️", // Löschen
 						"📤" // Exportieren
 				};
@@ -172,10 +197,15 @@ public class MyQuizzesPanel extends JPanel {
 				Frage frage = fragenListe.get(i);
 				sb.append("Frage ").append(i + 1).append(": ").append(frage.getFragetext()).append("\n");
 
+				boolean isMultipleChoice = frage.getFragetyp() == Fragetyp.MEHRFACHWAHL;
+
 				if (frage.getAntworten() != null && !frage.getAntworten().isEmpty()) {
 					for (Antwort a : frage.getAntworten()) {
-						// ( ) vor jeder Antwort, du könntest hier je nach Richtigkeit (x) machen
-						sb.append("( ) ").append(a.getAntworttext()).append("\n");
+						if (isMultipleChoice) {
+							sb.append("[ ] ").append(a.getAntworttext()).append("\n");
+						} else {
+							sb.append("( )").append(a.getAntworttext()).append("\n");
+						}
 					}
 				}
 				sb.append("Punkte: ").append(frage.getMaxPunktzahl()).append("\n\n");
@@ -186,8 +216,8 @@ public class MyQuizzesPanel extends JPanel {
 
 		// Datei speichern über JFileChooser
 		JFileChooser fileChooser = new JFileChooser();
-		// Default-Dateiname vorschlagen (z. B. quiz_Titel.txt)
-		fileChooser.setSelectedFile(new File("quiz_" + fullQuiz.getTitel() + ".txt"));
+
+		fileChooser.setSelectedFile(new File("bbQQuiz_" + fullQuiz.getTitel() + ".txt"));
 
 		int userSelection = fileChooser.showSaveDialog(MyQuizzesPanel.this);
 		if (userSelection == JFileChooser.APPROVE_OPTION) {

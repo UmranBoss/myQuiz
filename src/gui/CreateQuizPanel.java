@@ -30,6 +30,14 @@ import model.Lehrer;
 import model.Quiz;
 import model.Thema;
 
+/**
+ * Das Panel zur Erstellung eines neuen Quiz.
+ * 
+ * Dieses Panel bietet Eingabefelder für die grundlegenden Informationen eines
+ * Quiz, wie Titel, Kategorie und Thema. Es ermöglicht das Hinzufügen neuer
+ * Kategorien und Themen sowie das Speichern des erstellten Quiz in der
+ * Datenbank.
+ */
 public class CreateQuizPanel extends BasePanel {
 
 	private Quiz q;
@@ -42,6 +50,11 @@ public class CreateQuizPanel extends BasePanel {
 
 	private BaseFrame frame;
 
+	/**
+	 * Konstruktor, der das Panel für die Erstellung eines neuen Quiz initialisiert.
+	 * 
+	 * @param frame Das übergeordnete Frame, in dem das Panel angezeigt wird.
+	 */
 	public CreateQuizPanel(BaseFrame frame) {
 		this.frame = frame;
 
@@ -50,9 +63,7 @@ public class CreateQuizPanel extends BasePanel {
 		kD = new KategorieDAO();
 		tD = new ThemaDAO();
 		aD = new AntwortDAO();
-
-		// FrageDAO vorläufig mit null für QuizDAO erstellen
-		fD = new FrageDAO(null, aD);
+		fD = new FrageDAO(null, aD); // FrageDAO vorläufig mit null für QuizDAO erstellen
 
 		// QuizDAO erstellen & in FrageDAO injizieren
 		QuizDAO qD = new QuizDAO(lD, kD, tD, fD, aD);
@@ -80,16 +91,8 @@ public class CreateQuizPanel extends BasePanel {
 
 		gbc.gridx = 1;
 		BaseTextField titleField = new BaseTextField("Titel eingeben");
+		titleField.setDocument(new LimitedDocument(50));
 		add(titleField, gbc);
-
-//		// Beschreibung
-//		gbc.gridy++;
-//		gbc.gridx = 0;
-//		add(new BaseLabel("Beschreibung*", 14, true), gbc);
-
-//		gbc.gridx = 1;
-//		JTextField descField = createPlaceholderTextField("Beschreibung eingeben");
-//		add(descField, gbc);
 
 		// Thema-Dropdown
 		gbc.gridy++;
@@ -142,7 +145,6 @@ public class CreateQuizPanel extends BasePanel {
 			public void actionPerformed(ActionEvent e) {
 				// Werte aus den TF holen
 				String title = titleField.getText();
-				// String description = descField.getText();
 				int lehrerId = 1; // Platzhalter Dummy - hier kommt die User-Logik erst später
 
 				// Richtiges Objekt aus der ComboBox holen
@@ -155,30 +157,35 @@ public class CreateQuizPanel extends BasePanel {
 				}
 
 				// Überprüfung, ob eine gültige Kategorie & ein gültiges Thema ausgewählt wurde
-				if (k == null || t == null || k.getId() == 0 || t.getId() == 0) {
-					JOptionPane.showMessageDialog(null, "Bitte Thema & Kategorie auswählen!");
+				if (k == null && t == null || k.getId() == 0 && t.getId() == 0) {
+					JOptionPane.showMessageDialog(null, "Bitte Kategorie & Thema auswähöen!");
+					return;
+				}
+
+				if (k == null || k.getId() == 0) {
+					JOptionPane.showMessageDialog(null, "BItte Kategorie auswählen!");
+					return;
+				}
+
+				if (t == null || t.getId() == 0) {
+					JOptionPane.showMessageDialog(null, "BItte Thema auswählen!");
 					return;
 				}
 
 				// IDs aus den Objekten holen
 				int kategorieId = k.getId();
 				int themaId = t.getId();
-				Lehrer l = lD.findById(lehrerId);
+				Lehrer l = lD.findById(lehrerId); // Platzhalter
 
 				List<Frage> fragenListe = new ArrayList<>();
 				q = new Quiz(title, l, k, t, fragenListe);
 				QuizDAO qD = new QuizDAO(lD, kD, tD, fD, aD);
 				boolean success = qD.create(q); // das bereits gespeicherte Quiz verwenden
-				System.out.println("📌 DEBUG: Fragen für Quiz " + q.getId() + ": " + fD.findQuizById(q.getId()));
 
 				if (success) {
-
 					JOptionPane.showMessageDialog(null, "Quiz gespeichert!");
 					frame.getFrageSeitePanel().setQuiz(q);
-
 					frame.getCardLayout().show(frame.getMainPanel(), "FrageSeite");
-
-					System.out.println("FrageSeite wird angezeigt!");
 				} else {
 					JOptionPane.showMessageDialog(null, "Quiz konnte nicht gespeichert werden.");
 				}
@@ -191,16 +198,22 @@ public class CreateQuizPanel extends BasePanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String newTheme = JOptionPane.showInputDialog("Neues Thema eingeben:");
-				if (newTheme != null && !newTheme.trim().isEmpty()) {
-					// Neues Thema in die DB einfügen
-					ThemaDAO themaDAO = new ThemaDAO();
-					Thema thema = new Thema(newTheme); // Neues Thema erstellen
-					themaDAO.create(thema); // Thema speichern
-					themeBox.addItem(thema); // Das neue Thema im Dropdown
-					JOptionPane.showMessageDialog(null,
-							"Dein Eintrag '" + thema + "' wurde der Dropdown-Liste hinzugefügt!");
+				if (newTheme != null) {
+					if (newTheme.length() > 30) {
+						JOptionPane.showMessageDialog(null,
+								"Das eingegeben Wort für Thema darf höchstens 30 Zeichen lang sein.");
+					} else if (newTheme.trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Bitte Thema eintragen!");
+					} else {
+						ThemaDAO themaDAO = new ThemaDAO(); // Instanz von ThemaDAO erstellen
+						Thema thema = new Thema(newTheme); // Neues Thema-Objekt erstellen
+						themaDAO.create(thema); // Thema in DB speichern
+						themeBox.addItem(thema); // Das neue Thema im Dropdown hinzufügen
+						JOptionPane.showMessageDialog(null,
+								"Dein Eintrag '" + thema + "' wurde der Dropdown-Liste hinzugefügt!");
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Bitte Thema eintragen!");
+					JOptionPane.showMessageDialog(null, "Eingabe abgebrochen!");
 				}
 			}
 		});
@@ -210,44 +223,24 @@ public class CreateQuizPanel extends BasePanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String newCategory = JOptionPane.showInputDialog("Neue Kategorie eingeben:");
-				if (newCategory != null && !newCategory.trim().isEmpty()) {
-					// Hier fügst du die neue Kategorie in die Datenbank ein
-					KategorieDAO kategorieDAO = new KategorieDAO();
-					Kategorie kategorie = new Kategorie(newCategory); // Neue Kategorie erstellen
-					kategorieDAO.create(kategorie); // Kategorie speichern
-					categoryBox.addItem(kategorie); // Die neue Kategorie im Dropdown hinzufügen
-					JOptionPane.showMessageDialog(null,
-							"Dein Eintrag '" + kategorie + "' wurde der Dropdown-Liste hinzugefügt");
+				if (newCategory != null) {
+					if (newCategory.length() > 30) {
+						JOptionPane.showMessageDialog(null,
+								"Das eingegeben Wort für Kategorie darf höchstens 30 Zeichen lang sein.");
+					} else if (newCategory.trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Bitte Kategorie eintragen!");
+					} else {
+						KategorieDAO kategorieDAO = new KategorieDAO(); // Instanz von KategorieDAO erstellen
+						Kategorie kategorie = new Kategorie(newCategory); // Neues Kategorie-Objekt erstellen
+						kategorieDAO.create(kategorie); // Kategorie in DB speichern
+						categoryBox.addItem(kategorie); // Die neue Kategorie im Dropdown hinzufügen
+						JOptionPane.showMessageDialog(null,
+								"Dein Eintrag '" + kategorie + "' wurde der Dropdown-Liste hinzugefügt");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Bitte Kategorie eintragen!");
 				}
 			}
 		});
 	}
-
-	private JTextField createPlaceholderTextField(String placeholder) {
-		JTextField textField = new JTextField(placeholder);
-		textField.setForeground(Color.LIGHT_GRAY);
-		textField.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (textField.getText().equals(placeholder)) {
-					textField.setText("");
-					textField.setForeground(Color.BLACK);
-				}
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (textField.getText().isEmpty()) {
-					textField.setText(placeholder);
-					textField.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-		});
-
-		return textField;
-	}
-
 }

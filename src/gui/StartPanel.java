@@ -1,15 +1,35 @@
 package gui;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 
-import model.Quiz;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import java.awt.*;
-import java.util.ArrayList;
-
+/**
+ * Panel, das die Startseite der Anwendung darstellt. Es zeigt einen
+ * Begrüßungstext und bietet zwei Buttons: Einen zum Erstellen eines neuen
+ * Quizzes und einen, um die eigenen Quizzes anzuzeigen.
+ * 
+ * Das Panel ermöglicht es dem Benutzer, zwischen verschiedenen Ansichten (Tabs)
+ * zu wechseln.
+ */
 public class StartPanel extends BasePanel {
-	public StartPanel(JPanel mainPanel, QuizTabPanel quizTabs) {
-		
+	/**
+	 * Konstruktor für das StartPanel.
+	 * 
+	 * Das Panel zeigt einen Begrüßungstext und zwei Buttons: Einen zum Erstellen
+	 * eines neuen Quizzes und einen, um die eigenen Quizzes anzusehen. Durch Klick
+	 * auf die Buttons wird der Benutzer zu den jeweiligen Tabs weitergeleitet.
+	 * 
+	 * @param mainPanel Das Hauptpanel, das die verschiedenen Seiten (mit
+	 *                  CardLayout) enthält.
+	 * @param baseTab   Das TabbedPane, das die verschiedenen Registerkarten
+	 *                  verwaltet.
+	 */
+	public StartPanel(JPanel mainPanel, BaseTab baseTab) {
+
 		setLayout(new BorderLayout());
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 
@@ -24,13 +44,13 @@ public class StartPanel extends BasePanel {
 
 		// Button-Listener für "Quiz erstellen" → Öffnet den Tab "Quiz erstellen"
 		createQuizButton.addActionListener(e -> {
-			quizTabs.setSelectedIndex(0); // Tab 1 ("Quiz erstellen")
+			baseTab.setSelectedIndex(0); // Tab 1 ("Quiz erstellen")
 			cardLayout.show(mainPanel, "QuizSeiten");
 		});
 
 		// Button-Listener für "Meine Quizzes" → Öffnet den Tab "Meine Quizzes"
 		myQuizzesButton.addActionListener(e -> {
-			quizTabs.setSelectedIndex(1); // Tab 2 ("Meine Quizzes")
+			baseTab.setSelectedIndex(1); // Tab 2 ("Meine Quizzes")
 			cardLayout.show(mainPanel, "MeineQuizzes");
 		});
 

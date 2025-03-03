@@ -4,8 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
-/*
- * Die Konstante nutze ich derzeit nicht, kommt später zum Einsatz
+/**
+ * Das {@code Constants}-Interface enthält konstante Werte, die in der gesamten
+ * Anwendung verwendet werden. Diese Konstanten definieren verschiedene
+ * Schriftarten, Farben, Textgrößen und andere UI-Parameter für die
+ * Benutzeroberfläche der Anwendung.
+ * 
+ * @see Font
+ * @see Color
+ * @see Dimension
  */
 public interface Constants {
 
@@ -38,7 +45,7 @@ public interface Constants {
 	public static final Color COLOR_TAB = new Color(235, 64, 52);
 	public static final String LABEL_TAB1 = "Quizze erstellen";
 	public static final String LABEL_TAB2 = "Meine Quizze";
-	
+
 	// TEXTFELDER
 	public static final Dimension TEXTFIELD_SIZE = new Dimension(250, 25);
 	public static final Font TEXTFIELD_FONT = new Font("Comic Sans MS", Font.PLAIN, 12);

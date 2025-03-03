@@ -6,18 +6,24 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JTextField;
 
+/**
+ * {@code BaseTextField} ist eine benutzerdefinierte
+ * {@code JTextField}-Erweiterung, die einen Platzhaltertext unterstützt. Der
+ * Platzhaltertext wird angezeigt, wenn das Textfeld leer ist und keinen Fokus
+ * hat, und wird entfernt, wenn das Textfeld den Fokus erhält.
+ * 
+ * @see JTextField
+ */
 public class BaseTextField extends JTextField implements Constants {
 
 	private String placeholder;
 	private boolean isPlaceholder;
 
 	/**
-	 * Konstruktor für ein {@link BaseTextField}, das Platzhaltertext unterstützt.
-	 * 
-	 * Dieser Konstruktor initialisiert das Textfeld und setzt den übergebenen
-	 * Platzhaltertext. Wenn das Textfeld den Fokus verliert und leer ist, wird der
-	 * Platzhaltertext wieder angezeigt. Beim Fokussieren des Textfelds wird der
-	 * Platzhaltertext entfernt, sodass der Benutzer seine Eingabe vornehmen kann.
+	 * Erstellt ein {@code BaseTextField} mit einem Platzhaltertext. Wenn das
+	 * Textfeld den Fokus verliert und leer ist, wird der Platzhaltertext wieder
+	 * angezeigt. Beim Fokussieren wird der Platzhaltertext entfernt, um die Eingabe
+	 * des Benutzers zu ermöglichen.
 	 * 
 	 * @param placeholder Der Platzhaltertext, der im Textfeld angezeigt wird, wenn
 	 *                    es leer ist und keinen Fokus hat.
@@ -33,9 +39,7 @@ public class BaseTextField extends JTextField implements Constants {
 		setPreferredSize(TEXTFIELD_SIZE);
 		setMaximumSize(TEXTFIELD_SIZE);
 		setMinimumSize(TEXTFIELD_SIZE);
-
 		setText(placeholder);
-	
 		setFont(TEXTFIELD_FONT);
 		setForeground(TEXTFIELD_COLOR);
 
