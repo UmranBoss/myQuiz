@@ -1,8 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -20,9 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import data.dao.QuizDAO;
+import gui.QuestionTablePanel.IconRenderer;
 import model.Antwort;
 import model.Frage;
 import model.Fragetyp;
@@ -118,8 +123,7 @@ public class MyQuizzesPanel extends JPanel {
 					case 3: // Vorschau
 						JOptionPane.showMessageDialog(MyQuizzesPanel.this,
 								"Vorschau des Quiz: " + selectedQuiz.getTitel() + "\n\n"
-										+ "(Hier könntest du ein Dialogfenster öffnen, "
-										+ "um Details zum ausgewählten Quiz anzuzeigen.)");
+										+ "Vorschau-Funktion ist derzeit nicht verfügbar.");
 						break;
 
 					case 4: // Bearbeiten (Implementation für später)
@@ -157,16 +161,59 @@ public class MyQuizzesPanel extends JPanel {
 		tableModel.setRowCount(0); // Tabelle leeren
 		quizzes = quizDAO.findAll(); // Quizze laden
 
+		// Icons laden & skalieren;
+		ImageIcon previewIcon = scaleImageIcon("src/gui/img/eye.png", 20, 20);
+		ImageIcon editIcon = scaleImageIcon("src/gui/img/edit.png", 20, 20);
+		ImageIcon binIcon = scaleImageIcon("src/gui/img/recycling-bin.png", 20, 20);
+		ImageIcon exportIcon = scaleImageIcon("src/gui/img/export.png", 20, 20);
+
 		if (quizzes != null) {
 			for (Quiz quiz : quizzes) {
 				Object[] rowData = { quiz.getTitel(), (quiz.getThema() != null) ? quiz.getThema().getBezeichnung() : "",
-						(quiz.getKategorie() != null) ? quiz.getKategorie().getBezeichnung() : "", "🔍", // Vorschau
-						"✏️ (inaktiv)", // Bearbeiten
-						"🗑️", // Löschen
-						"📤" // Exportieren
+						(quiz.getKategorie() != null) ? quiz.getKategorie().getBezeichnung() : "", previewIcon, // Vorschau
+						editIcon, // Bearbeiten
+						binIcon, // Löschen
+						exportIcon // Exportieren
 				};
 				tableModel.addRow(rowData);
 			}
+		}
+		// Renderer für Icon-Zellen setzen
+		table.getColumnModel().getColumn(3).setCellRenderer(new IconRenderer());
+		table.getColumnModel().getColumn(4).setCellRenderer(new IconRenderer());
+		table.getColumnModel().getColumn(5).setCellRenderer(new IconRenderer());
+		table.getColumnModel().getColumn(6).setCellRenderer(new IconRenderer());
+	}
+
+	/**
+	 * Skaliert ein ImageIcon auf die gewünschte Breite und Höhe.
+	 *
+	 * @param path   Der Dateipfad des Bildes.
+	 * @param width  Die gewünschte Breite des Icons.
+	 * @param height Die gewünschte Höhe des Icons.
+	 * @return Das skalierte ImageIcon.
+	 */
+	private ImageIcon scaleImageIcon(String path, int width, int height) {
+		ImageIcon icon = new ImageIcon(path);
+		Image img = icon.getImage();
+		Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		return new ImageIcon(scaledImg);
+	}
+
+	/**
+	 * Ein benutzerdefinierter TableCellRenderer für die Anzeige von Icons in einer
+	 * JTable. Die Icons werden dabei mittig innerhalb der Zelle ausgerichtet.
+	 */
+	class IconRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			if (value instanceof ImageIcon) {
+				JLabel label = new JLabel((ImageIcon) value);
+				label.setHorizontalAlignment(SwingConstants.CENTER);
+				return label;
+			}
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		}
 	}
 
