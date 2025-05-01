@@ -1,35 +1,73 @@
 <p align="center">
-  <img src="/images/answer.png" width="100" alt="logo" />
+  <h1>My MemoBoard</h1>
 </p>
 
-# 🎯 Quiz-Anwendung
-Dies ist eine **Java-basierte Quiz-Anwendung**, entwickelt mit **Eclipse**, **Swing** für die GUI und **MySQL** für die Datenbankanbindung. Das Projekt ist **noch in Entwicklung**.
+# 🧠 My MemoBoard
+**My MemoBoard** ist eine **Java-basierte Webanwendung**, entwickelt mit **Eclipse** und betrieben über einen **Tomcat-Webserver**. Sie dient als persönliche Organisationsplattform mit mehreren geplanten Modulen für Aufgabenverwaltung, Protokolle, Finanzen und mehr.  
+⚠️ Das Projekt befindet sich derzeit **in aktiver Entwicklung** – zwei Module sind bereits nutzbar, jedoch noch nicht vollständig fertiggestellt.
+
 ## 📝 Projektbeschreibung
-Die Anwendung bbQQuiz dient Lehrkräften dazu, Quizze zu erstellen, zu speichern, zu verwalten und zu exportieren. Fragen bestehen aus einem Fragetext, vier Antwortmöglichkeiten, einer Kennzeichnung der richtigen Antwort(en) und einer zugehörigen Punktzahl (auch negativ bei falschen Antworten).
-Die Fragen werden nach Themen und Kategorien strukturiert und als Einfach- oder Mehrfachwahl klassifiziert. Eine Exportfunktion ermöglicht die Ausgabe der Fragen als formatierte Textdatei (z.B. CSV).
-### 📌 Hauptfunktionen:
-- **Verbindung zur MySQL-Datenbank**  für die Verwaltung von Quizzen, Fragen, Antworten, Kategorien und Themen.
-- **Objektorientierte Konzepte**: Vererbung, Polymorphismus, Datenkapselung für die Strukturierung der Quiz-Daten.
-- **GUI mit Swing** zur Interaktion mit dem Benutzer, insbesondere zur Erstellung und Verwaltung von Quizfragen.
-- **Export-Funktion** für das Speichern von Quizfragen als CSV- oder TXT-Dateien.
-### 👥 Wichtige Klassen:
-- **Lehrer**: Repräsentiert den Benutzer, der Quizze erstellt und verwaltet.
-- **Quiz**: Repräsentiert ein Quiz, das Fragen enthält, und speichert Titel, Kategorie und Thema.
-- **Frage**: Repräsentiert eine einzelne Quizfrage mit den zugehörigen Antwortmöglichkeiten und Punktzahlen.
-- **Antwort**: Repräsentiert die möglichen Antworten auf eine Frage, einschließlich der Richtigkeit und Punktzahl.
+Die Anwendung umfasst sechs geplante Module zur persönlichen Verwaltung:
+
+- ✅ **DoneDing**: Aufgaben- und To-do-Liste  
+- 🧾 **StudySnap**: Unterrichtsprotokolle verwalten und speichern  
+- 💸 **CashCheck**: Budgetübersicht und Finanzplanung  
+- 📄 **VertragVox**: Verwaltung von Verträgen und Abonnements  
+- 🩺 **DocDrop**: Überblick über Arzttermine und Erinnerungen  
+- 📘 **SeelenSkript**: Persönliche Notizen und tägliche Einträge
+
+### 🧩 Derzeit implementierte Module:
+
+#### ✅ DoneDing
+Das Aufgabenmodul bietet derzeit folgende Funktionen:
+- Aufgaben mit **Titel, Beschreibung und Fälligkeitsdatum** erstellen
+- Optional: **Erinnerungsdatum und -uhrzeit** setzen
+- Aufgaben können **kategorisiert** und mit **Prioritäten** versehen werden
+
+#### 🧾 StudySnap
+Dieses Modul dient zur Erfassung von Unterrichtsprotokollen – aktuell beispielhaft angepasst an die Ausbildung zum **Fachinformatiker für Anwendungsentwicklung**:
+- Auswahl des **Unterrichtsmoduls** über ein Dropdown-Menü (z. B. Netzwerktechnik, Datenbanken, Programmierung)
+- Freitextfeld für das **konkrete Thema**
+- Protokolle können als **CSV-Datei heruntergeladen** werden – ideal zur Archivierung oder Weitergabe
+  
+## 💾 Datenspeicherung
+- Derzeit erfolgt die **persistente Datenspeicherung über Serialisierung** in .ser-Dateien.
+- In späteren Entwicklungsphasen ist ein **Wechsel auf SQLite oder eine andere relationale Datenbank** geplant.
+
+## 🌐 Technische Umsetzung
+Die Anwendung ist als **dynamische Webanwendung** aufgebaut. Ein Tomcat-Servlet-Container verarbeitet die Client-Server-Kommunikation. Die Serverlogik wird mit **Java-Servlets** umgesetzt, erste Seiten mit einfachem HTML/JSP.
+
 ## ⚙️ Technologien
-- **Java** (Backend-Entwicklung)
-- **MySQL** (Datenbank)
-- **JDBC** (Datenbankanbindung)
-- **Swing** (Frontend-GUI u.a. für die Frageerstellung)
-## 📊 Architektur
-- [**ER-Modell**](/images/mySQL_ERD.png), [**Klassendiagramm**](/images/KlassenDiagramm.png) & [**Packagediagramm**](/images/PackageDiagramm.png) zur Datenstruktur.
-## 📐 Design
-- Das [**Mockup**](/images/Mockup.pdf) zeigt das geplante Layout dieser Anwendung
+- **Java** (Backend – Servlets, Serialisierung)
+- **Apache Tomcat** (Webserver)
+- **HTML/CSS/JavaScript** (Frontend)
+- **Eclipse IDE**
+- (Zukünftig: **SQLite** für Datenpersistenz)
+
+
+## 📐 Design & Struktur
+- Simple grafische Mockups in Arbeit
+
 ## 🚧 Projektstatus
-- **In Progress**: Die **Data Layer** (Datenbankschicht) wurde bereits implementiert, und weitere Funktionen werden kontinuierlich hinzugefügt.
+- ✅ Erste Funktionen von DoneDing und StudySnap lauffähig
+- 📁 Speicherung erfolgt lokal via .ser-Dateien
+- 🧱 Fundamentale Serverlogik (Routing, Sessions etc.) implementiert
+- 🛠️ Weitere Module in Planung & Strukturierung
+
 ---
-### 🛠️ Weitere Features:
-- **Benutzerverwaltung**: Möglichkeit für Lehrer, sich einzuloggen und Quizze zu erstellen und zu verwalten.
-- **Exportfunktion**: Quizfragen können als CSV- oder TXT-Datei exportiert werden.
-- **Erweiterte Suchfunktionen** für Fragen und Quizze nach Thema, Kategorie oder Titel.
+
+### 🛠️ Geplante Erweiterungen
+- Benutzerverwaltung & Login-System
+- Datenexport (weitere Formate)
+- Responsives Frontend (mobile Ansicht)
+- SQLite-Anbindung statt Serialisierung
+- Kalender- und Erinnerungsfunktionen
+- Mobile App (iOS)
+- KI (TTS, STT)
+- Personalisierte Statistiken
+- Dark/Light-Modus & personalisierte UI
+- Sicherheit (Ende-zu-Ende-Verschlüsselung, OAuth)
+- Offline-Modus
+- Mehrsprachigkeit
+  
+
